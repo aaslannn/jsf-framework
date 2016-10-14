@@ -1,0 +1,8 @@
+#ldap parameters
+ldap_host=localhost
+ldap_port=389
+ldap_user=cn=admin
+ldap_pass=admin
+ldap_search_dn=ou=Users,dc=ozguryazilim,dc=com,dc=tr
+ldap_login_attr=cn
+admin_username=aaslannn

@@ -1,0 +1,47 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="webAppCtx" class="org.eclipse.jetty.webapp.WebAppContext">
+	<!-- by Code -->
+	<Get name="errorHandler">
+		<Call name="addErrorPage">
+			<Arg type="int">404</Arg>
+			<Arg type="String">/error404.xhtml</Arg>
+		</Call>
+	</Get>
+
+	<Get name="errorHandler">
+		<Call name="addErrorPage">
+			<Arg type="int">403</Arg>
+			<Arg type="String">/error403.xhtml</Arg>
+		</Call>
+	</Get>
+
+	<New id="appManager" class="org.eclipse.jetty.plus.jndi.Resource">
+		<Arg>
+			<Ref id="webAppCtx" />
+		</Arg>
+		<Arg>BeanManager</Arg>
+		<Arg>
+			<New class="javax.naming.Reference">
+				<Arg>javax.enterprise.inject.spi.BeanManager</Arg>
+				<Arg>org.jboss.weld.resources.ManagerObjectFactory</Arg>
+				<Arg />
+			</New>
+		</Arg>
+	</New>
+
+
+	<Call name="addEventListener">
+		<Arg>
+			<New class="org.jboss.weld.environment.servlet.Listener"></New>
+		</Arg>
+	</Call>
+
+	<Call name="addEventListener">
+		<Arg>
+			<New class="org.jboss.seam.faces.beanManager.BeanManagerServletContextListener"></New>
+		</Arg>
+	</Call>
+	
+</Configure>

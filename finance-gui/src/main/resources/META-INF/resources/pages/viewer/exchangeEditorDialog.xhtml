@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://java.sun.com/jsf/composite/ozguryazilim">
+
+<ui:composition>
+	<h:panelGroup id="editorContainer">
+		<p:dialog id="editor" header="#{viewerBundle.exchangeFund}" widgetVar="exchangeDialog">
+			<p:ajax event="close" process="@this" update="listing" />
+
+			<h:panelGroup id="editorContent" layout="block">
+				<h:panelGrid columns="3">
+					<h:outputText value="#{viewerBundle.soldCurrencyAmount}" />
+					<h:panelGroup layout="block">
+						<p:inputText id="soldCurrencyAmount" value="#{financeExchangeViewController.entity.soldCurrencyAmount}" required="true" >
+							<p:ajax event="blur" listener="#{financeExchangeViewController.amountChanged}" process="@this boughtCurrencyAmount soldCurrencyAmount" update="rate"/>
+						</p:inputText>
+						<h:selectOneMenu value="#{financeExchangeViewController.entity.soldCurrency}">
+							<f:selectItems value="#{financeExchangeViewController.currencyList}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:message for="soldCurrencyAmount" />
+
+					<h:outputText value="#{viewerBundle.boughtCurrencyAmount}" />
+					<h:panelGroup layout="block">
+						<p:inputText id="boughtCurrencyAmount" value="#{financeExchangeViewController.entity.boughtCurrencyAmount}" required="true" >
+							<p:ajax event="blur" listener="#{financeExchangeViewController.amountChanged}" process="@this boughtCurrencyAmount soldCurrencyAmount" update="rate"/>
+						</p:inputText>
+						
+						<h:selectOneMenu value="#{financeExchangeViewController.entity.boughtCurrency}">
+							<f:selectItems value="#{financeExchangeViewController.currencyList}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<h:message for="boughtCurrencyAmount" />
+
+					<h:outputText value="#{viewerBundle.rate}" />
+					<p:inputText id="rate" value="#{financeExchangeViewController.entity.rate}" required="true" />
+					<h:message for="rate" />
+
+				</h:panelGrid>
+
+				<p:commandButton id="saveExchange" value="#{defaultBundle.save}" update="editorContent listing summaryPanel" process="editorContent" action="#{financeExchangeViewController.save}"
+					oncomplete="if (!args.validationFailed) { exchangeDialog.hide(); }" />
+				<p:defaultCommand target="saveExchange" />
+			</h:panelGroup>
+		</p:dialog>
+	</h:panelGroup>
+</ui:composition>
+</html>

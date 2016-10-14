@@ -1,0 +1,38 @@
+
+addInvesment = Add
+
+algorithm.dynamic = Dynamic Algorithm
+algorithm.static  = Static Algorithm
+
+amount = Current Total Amount
+
+apply = Apply
+
+ask = Ask
+
+bid = Bid
+
+buyOrderRatio = Buy Order Ratio (%)
+
+newAmount = Add New Amount:
+
+order = BUY / SELL
+
+provider.garanti   = Garanti Bank
+provider.isbankasi = \u0130\u015F Bank
+
+sellNegativeOrderRatio = Sell - Order Ratio (%)
+
+sellPositiveOrderRatio = Sell + Order Ratio (%)
+
+summaryInvestedAmount = Invested Amount
+
+summaryProcessedInvesment = Processed Invesment Value
+
+summaryTotalGain = Total Gain
+
+summaryTotalInvesment = Total Invesment Value
+
+summaryWaitingInvesment = Waiting Invesment
+
+type = Type

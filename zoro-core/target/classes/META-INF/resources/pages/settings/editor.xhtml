@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://java.sun.com/jsf/composite/ozguryazilim">
+
+<ui:composition>
+	<h:panelGroup id="editorContent">
+		<h:panelGrid columns="6" styleClass="editorPanelGrid">
+			<f:facet name="header">
+				#{settingsBundle.applicationSettings}
+			</f:facet>>
+
+			<h:outputText value="#{settingsBundle.guiListSize}" />
+			<p:inputText id="guiListSize" value="#{settingsViewController.entity.guiListSize}" required="true" />
+			<h:message for="guiListSize" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="6" styleClass="editorPanelGrid">
+			<f:facet name="header">
+				#{settingsBundle.ldapSettings}
+			</f:facet>
+			<h:outputText value="#{settingsBundle.ldapHost}" />
+			<p:inputText id="ldapHost" value="#{settingsViewController.entity.ldapHost}" disabled="true" />
+			<h:message for="ldapHost" />
+
+			<h:outputText value="#{settingsBundle.ldapPort}" />
+			<p:inputText id="ldapPort" value="#{settingsViewController.entity.ldapPort}" disabled="true" />
+			<h:message for="ldapPort" />
+
+			<h:outputText value="#{settingsBundle.ldapUser}" />
+			<p:inputText id="ldapUser" value="#{settingsViewController.entity.ldapUser}" disabled="true" />
+			<h:message for="ldapUser" />
+
+			<h:outputText value="#{settingsBundle.ldapSearchDN}" />
+			<p:inputText id="ldapSearchDN" value="#{settingsViewController.entity.ldapSearchDN}" disabled="true" />
+			<h:message for="ldapSearchDN" />
+
+			<h:outputText value="#{settingsBundle.ldapLoginAttr}" />
+			<p:inputText id="ldapLoginAttr" value="#{settingsViewController.entity.ldapLoginAttr}" disabled="true" />
+			<h:message for="ldapLoginAttr" />
+
+			<h:outputText value="#{settingsBundle.adminUsername}" />
+			<p:inputText id="adminUsername" value="#{settingsViewController.entity.adminUsername}" disabled="true" />
+			<h:message for="adminUsername" />
+		</h:panelGrid>
+	</h:panelGroup>
+</ui:composition>
+</html>

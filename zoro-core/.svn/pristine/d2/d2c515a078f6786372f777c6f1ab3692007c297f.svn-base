@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:o="http://java.sun.com/jsf/composite/ozguryazilim">
+
+    <ui:composition>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="#{roleBundle.applicationName}" />
+            </f:facet>
+            <h:outputText value="#{messageUtility.get(permission.applicationName,permission.applicationName)}" />
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="#{roleBundle.accessMenu}" />
+            </f:facet>
+            <p:selectBooleanCheckbox value="#{permission.accessMenu}" >
+                <p:ajax update=":#{cc.clientId}:form:applicationPermissions" />
+            </p:selectBooleanCheckbox>
+        </p:column>
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="#{roleBundle.permissions}" />
+            </f:facet>
+            <o:manyBox selectionBean="#{permission}" selectionProperty="permissionsArray" inputValue="#{roleViewController.getPermissionsAsStr(permission)}"
+                       list="#{roleViewController.getAvailablePermissions(permission.applicationName)}" selectionUpdate=":#{cc.clientId}:form:applicationPermissions" rendered="#{permission.accessMenu}">
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{roleBundle.permission}" />
+                    </f:facet>
+                    <h:outputText value="#{messageUtility.get('role',entity.name)}" />
+                </p:column>
+            </o:manyBox>
+
+        </p:column>
+    </ui:composition>
+
+</html>

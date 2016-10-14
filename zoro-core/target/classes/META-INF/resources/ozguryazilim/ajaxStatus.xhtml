@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:cc="http://java.sun.com/jsf/composite" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="style" default="float:left;" />
+</cc:interface>
+
+<cc:implementation>
+	<p:ajaxStatus style="#{cc.attrs.style}">
+		<f:facet name="start">
+			<p:graphicImage name="/img/ajax-loader.gif" />
+		</f:facet>
+		<f:facet name="complete">
+			<p:graphicImage name="/img/empty.png" />
+		</f:facet>
+	</p:ajaxStatus>
+</cc:implementation>
+
+</html>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+
+	<persistence-unit name="finance" transaction-type="RESOURCE_LOCAL">
+		<description>Finance Persistence</description>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!--
+		<jar-file>zetta-core-0.0.1-SNAPSHOT.jar</jar-file>
+		<jar-file>lib/zetta-labeling-0.0.1-SNAPSHOT.jar </jar-file>
+		
+		-->
+		<class>com.ozguryazilim.zoro.core.auth.entity.ZoroRole</class>
+		<class>com.ozguryazilim.zoro.core.auth.entity.ZoroApplicationPermissionHolder</class>
+		<class>com.ozguryazilim.zoro.core.auth.entity.ZoroApplicationPermission</class>
+		
+		<class>com.ozguryazilim.zoro.core.settings.ZoroSettingsHolder</class>
+		
+		<class>com.ozguryazilim.finance.crawler.entity.FinanceData</class>
+		<class>com.ozguryazilim.finance.crawler.entity.FundValueHolder</class>
+		
+		<class>com.ozguryazilim.finance.web.entity.FinanceUserSetting</class>	
+		<class>com.ozguryazilim.finance.web.entity.FinanceInvesment</class>
+		<class>com.ozguryazilim.finance.web.entity.FinancePurchase</class>
+		
+		
+		
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/finance" />
+			<property name="javax.persistence.jdbc.user" value="finance" />
+			<property name="javax.persistence.jdbc.password" value="fin1234" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			<property name="hibernate.enable_lazy_load_no_trans" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

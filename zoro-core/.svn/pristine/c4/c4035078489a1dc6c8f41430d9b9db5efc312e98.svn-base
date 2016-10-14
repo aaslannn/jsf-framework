@@ -1,0 +1,6 @@
+.lookupBoxImage {
+	height: 16px;
+	margin-bottom: -4px;
+	margin-left: -20px;
+	pointer-events: none;
+}

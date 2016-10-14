@@ -1,0 +1,137 @@
+div.version {
+	bottom: 0;
+	direction: ltr;
+	position: fixed;
+	z-index: 100;
+	left: auto;
+	right: 0;
+	margin-right: 10px;
+}
+
+table.searchedBox {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #EEEEEE;
+}
+
+td.searchedBox {
+	width: 190px;
+	text-align: left;
+	margin-left: 25px;
+}
+
+.inputButton {
+	margin-top: 10px;
+}
+
+.primeIcon {
+	background-image:
+		url("#{resource['primefaces-redmond/images/ui-icons_6da8d5_256x240.png']}");
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	margin-left: 2px;
+}
+
+.primeIcon:hover {
+	background-image:
+		url("#{resource['primefaces-redmond/images/ui-icons_f9bd01_256x240.png']}");
+}
+
+h3.newsList {
+	margin: 0 0 8px 0;
+}
+
+.rightButton {
+	float: left;
+	margin-right: 0px;
+}
+
+.userArea {
+	background: url("#{resource['img/login/bg-login.jpg']}") no-repeat scroll left
+		top transparent;
+	height: 300px;
+	padding: 30px 22px 20px;
+	width: 348px;
+	margin: auto;
+}
+
+.userArea .loginArea {
+	padding: 30px 20px 0;
+}
+
+.userArea .loginArea label {
+	display: block;
+	overflow: hidden;
+	padding: 5px 0;
+}
+
+.userArea .loginArea .formTitle {
+	color: #002F82;
+	display: block;
+	font-family: Ubuntu, Sans-Serif;
+	font-size: 14px;
+	font-weight: 500;
+	padding: 8px 0;
+	width: 308px;
+}
+
+.userArea .loginArea label span.inputArea {
+	background: url("#{resource['img/login/bg-input.png']}") no-repeat scroll left top
+		transparent;
+	display: block;
+	height: 30px;
+	width: 308px;
+}
+
+.userArea .loginArea label input {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	color: #9CACC0;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 13px;
+	margin: 5px;
+	width: 295px;
+}
+
+.userArea .loginArea button {
+	border: medium none;
+	cursor: pointer;
+	float: right;
+	height: 30px;
+	margin: 6px 0;
+	width: 108px;
+}
+
+.loginPanel {
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border-style: solid;
+	border-width: 1px;
+	margin: auto;
+	text-align: center;
+	width: 400px;
+	background: none repeat scroll 0 0 whitesmoke;
+}
+
+.loginWrapperPanel {
+	margin-top: 60px;
+}
+
+.loginPanel table {
+	margin: auto;
+	padding: 15px;
+}
+
+.messagePanel {
+	margin: 0 auto;
+	max-width: 30em;
+	text-align: center;
+}
+
+.ui-datatable tbody td {
+	border-color: inherit;
+	max-width: 14em;
+	white-space: normal;
+}

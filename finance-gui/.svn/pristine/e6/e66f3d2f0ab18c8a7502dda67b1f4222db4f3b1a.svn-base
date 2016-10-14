@@ -1,0 +1,38 @@
+
+addInvesment = Ekle
+
+algorithm.dynamic = Dinamik Algorithma
+algorithm.static  = Statik Algoritma
+
+amount = Mevcut Toplam Miktar
+
+apply = Uygula
+
+ask = Sat\u0131\u015F
+
+bid = Al\u0131\u015F
+
+buyOrderRatio = AL Emri Oran\u0131 (%)
+
+newAmount = Yeni Miktar Ekle: 
+
+order = AL / SAT
+
+provider.garanti   = Garanti Bankas\u0131
+provider.isbankasi = \u0130\u015F Bankas\u0131
+
+sellNegativeOrderRatio = SAT- Emri Oran\u0131 (%)
+
+sellPositiveOrderRatio = SAT+ Emri Oran\u0131 (%)
+
+summaryInvestedAmount = Yat\u0131r\u0131lan Miktar
+
+summaryProcessedInvesment = \u0130\u015Flenmi\u015F Yat\u0131r\u0131m De\u011Feri
+
+summaryTotalGain = Toplam Kazan\u00E7
+
+summaryTotalInvesment = Toplam Yat\u0131r\u0131m
+
+summaryWaitingInvesment = Bekleyen Yat\u0131r\u0131m
+
+type = Yat\u0131r\u0131m Arac\u0131

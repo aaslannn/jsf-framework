@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://java.sun.com/jsf/composite/ozguryazilim" xmlns:f="http://java.sun.com/jsf/core">
+
+	<f:loadBundle basename="messages.default" var="defaultBundle" />
+
+	<o:page>
+		<h:panelGroup styleClass="userArea" layout="block">
+			<h:panelGroup id="loginPanel" styleClass="loginArea" layout="block">
+				<h:panelGrid columns="3">
+					<h:outputText value="#{defaultBundle.username} : "/>
+					<p:inputText id="username" value="#{zoroCredentials.username}" required="true"/>
+					<h:message for="username" />
+					
+					<h:outputText value="#{defaultBundle.password} : "/>
+					<p:password id="password" value="#{zoroCredentials.password}" required="true"/>
+					<h:message for="password" />
+				</h:panelGrid> 
+					
+				<p:commandButton value="#{defaultBundle.login}" action="#{authenticationController.login}" update="loginPanel" process="loginPanel"/>
+			</h:panelGroup>
+		</h:panelGroup>
+	</o:page>
+</html>

@@ -1,0 +1,243 @@
+package com.ozguryazilim.finance.web.gui;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.primefaces.model.LazyDataModel;
+
+import com.ozguryazilim.finance.crawler.entity.FinanceDataProviderType;
+import com.ozguryazilim.finance.crawler.entity.FundType;
+import com.ozguryazilim.finance.crawler.entity.FundValueHolder;
+import com.ozguryazilim.finance.web.entity.FinanceAlgorithm;
+import com.ozguryazilim.finance.web.entity.FinanceInvesment;
+import com.ozguryazilim.finance.web.entity.FinancePurchase;
+import com.ozguryazilim.finance.web.entity.FinanceSummary;
+import com.ozguryazilim.finance.web.entity.FinanceUserSetting;
+import com.ozguryazilim.zoro.core.JSFLazyDataModel;
+import com.ozguryazilim.zoro.core.JSFViewController;
+import com.ozguryazilim.zoro.core.auth.ZoroCredentials;
+import com.ozguryazilim.zoro.core.db.DBEntityManager;
+import com.ozguryazilim.zoro.core.util.MessageUtility;
+
+@Named(value = "financeViewerViewController")
+@ViewScoped
+public class FinanceViewerViewController extends JSFViewController<FundValueHolder> {
+
+	private static final String	LATEST_VALUES_QUERY	= "SELECT valueHolder FROM FundValueHolder valueHolder JOIN valueHolder.data as data WHERE data.type = ? and data.time >= (SELECT max(fData.time) FROM FinanceData fData WHERE fData.type = ? ) ORDER BY valueHolder.type";
+
+	private static final long	serialVersionUID	= 3723252338624109893L;
+
+	private FinanceUserSetting	setting				= null;
+
+	private double				addedTLAmount		= 0;
+
+	private FinanceSummary		summary;
+
+	@Inject
+	private DBEntityManager		entityManager;
+
+	@Inject
+	private ZoroCredentials		credentials;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void entityChanged() {
+
+		List<FinanceUserSetting> result = entityManager.executeParameterizedSelectQuery("SELECT setting FROM FinanceUserSetting setting WHERE setting.username = ?",
+				new Object[] { credentials.getUsername() });
+
+		if (result.size() == 1) {
+			setSetting(result.get(0));
+		}
+		else {
+			setting = new FinanceUserSetting();
+			setting.setBuyOrderRatio(0.2);
+			setting.setSellNegativeOrderRatio(0.2);
+			setting.setSellPositiveOrderRatio(1);
+			setting.setUsername(credentials.getUsername());
+		}
+
+		calculateSummary();
+
+		super.entityChanged();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void calculateSummary() {
+		summary = new FinanceSummary();
+
+		// Calculate total invesment amount
+		FinanceInvesment trInvesmentOfUser = getInvesmentOfUser(FundType.TR);
+		summary.setInvestedAmount(trInvesmentOfUser.getAmount());
+
+		// Calculate total currency in hand value
+		List<FinanceInvesment> invesmentsOfUser = getInvesmentsOfUser();
+		List<FundValueHolder> latestRates = entityManager.executeParameterizedSelectQuery(LATEST_VALUES_QUERY, new Object[] { setting.getProvider(), setting.getProvider() });
+		double totalInvesmentValue = 0;
+		double trInvesmentValue = 0;
+		for (FinanceInvesment invesment : invesmentsOfUser) {
+			if (invesment.getFundType() != FundType.TR) {
+				double rate = getFundAskRate(latestRates, invesment.getFundType());
+				totalInvesmentValue += rate * invesment.getAmount();
+			}
+			else {
+				trInvesmentValue = invesment.getAmount();
+			}
+		}
+		summary.setProcessedInvesment(totalInvesmentValue);
+		summary.setWaitingInvesment(trInvesmentValue);
+		summary.setTotalInvesment(trInvesmentValue + totalInvesmentValue);
+		summary.setTotalIncome(summary.getTotalInvesment() - summary.getInvestedAmount());
+
+	}
+
+	@Override
+	public LazyDataModel<FundValueHolder> getDataModel() {
+		JSFLazyDataModel<FundValueHolder> dataModel = (JSFLazyDataModel<FundValueHolder>) super.getDataModel();
+		dataModel.setCustomQuery(LATEST_VALUES_QUERY, new Object[] { setting.getProvider(), setting.getProvider() });
+		return dataModel;
+	}
+
+	public void saveSetting() {
+		entityManager.save(setting);
+		
+		calculateSummary();
+	}
+
+	public List<SelectItem> getAlgorithmList() {
+		List<SelectItem> items = new ArrayList<SelectItem>();
+
+		for (FinanceAlgorithm algorithm : FinanceAlgorithm.values()) {
+			items.add(new SelectItem(algorithm, MessageUtility.get("viewer", "algorithm." + algorithm.toString().toLowerCase())));
+		}
+
+		return items;
+	}
+
+	public List<SelectItem> getProviderList() {
+		List<SelectItem> items = new ArrayList<SelectItem>();
+
+		for (FinanceDataProviderType provider : FinanceDataProviderType.values()) {
+			items.add(new SelectItem(provider, MessageUtility.get("viewer", "provider." + provider.toString().toLowerCase())));
+		}
+
+		return items;
+	}
+
+	public void addTRInvesment() {
+		FinancePurchase purchase = new FinancePurchase();
+		purchase.setProvider(setting.getProvider());
+		purchase.setBoughtFundType(FundType.TR);
+		purchase.setBoughtCurrencyAmount(addedTLAmount);
+		purchase.setUsername(credentials.getUsername());
+
+		entityManager.save(purchase);
+
+		FinanceInvesment invesment = getInvesmentOfUser(FundType.TR);
+		invesment.setAmount(invesment.getAmount() + addedTLAmount);
+
+		entityManager.save(invesment);
+		addedTLAmount = 0;
+		
+		calculateSummary();
+	}
+
+	@SuppressWarnings("unchecked")
+	public FinanceInvesment getInvesmentOfUser(FundType fund) {
+		List<FinanceInvesment> invesments = entityManager.executeParameterizedSelectQuery(
+				"SELECT fi FROM FinanceInvesment fi WHERE fi.username = ? and fi.provider = ? and fi.fundType = ?", new Object[] { credentials.getUsername(),
+						setting.getProvider(), fund });
+
+		if (invesments.size() > 0) {
+			return invesments.get(0);
+		}
+
+		FinanceInvesment financeInvesment = new FinanceInvesment();
+		financeInvesment.setAmount(0);
+		financeInvesment.setFundType(fund);
+		financeInvesment.setProvider(setting.getProvider());
+		financeInvesment.setUsername(credentials.getUsername());
+
+		return financeInvesment;
+	}
+
+	public double getFundAskRate(List<FundValueHolder> holders, FundType fund) {
+		for (FundValueHolder holder : holders) {
+			if (holder.getType() == fund) {
+				return holder.getAskValue();
+			}
+		}
+
+		return 0;
+	}
+
+	public String getOrder(FundType type) {
+		return "AL";
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<FinanceInvesment> getInvesmentsOfUser() {
+		List<FinanceInvesment> invesments = entityManager.executeParameterizedSelectQuery("SELECT fi FROM FinanceInvesment fi WHERE fi.username = ? and fi.provider = ?",
+				new Object[] { credentials.getUsername(), setting.getProvider() });
+
+		return invesments;
+	}
+
+	public void buy(FundType type) {
+
+	}
+
+	public void sell(FundType type) {
+
+	}
+
+	/**
+	 * @return the setting
+	 */
+	public FinanceUserSetting getSetting() {
+		return setting;
+	}
+
+	/**
+	 * @param setting
+	 *            the setting to set
+	 */
+	public void setSetting(FinanceUserSetting setting) {
+		this.setting = setting;
+	}
+
+	/**
+	 * @return the summary
+	 */
+	public FinanceSummary getSummary() {
+		return summary;
+	}
+
+	/**
+	 * @param summary
+	 *            the summary to set
+	 */
+	public void setSummary(FinanceSummary summary) {
+		this.summary = summary;
+	}
+
+	/**
+	 * @return the addedTLAmount
+	 */
+	public double getAddedTLAmount() {
+		return addedTLAmount;
+	}
+
+	/**
+	 * @param addedTLAmount
+	 *            the addedTLAmount to set
+	 */
+	public void setAddedTLAmount(double addedTLAmount) {
+		this.addedTLAmount = addedTLAmount;
+	}
+}

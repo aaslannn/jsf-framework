@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:o="http://java.sun.com/jsf/composite/ozguryazilim" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:loadBundle basename="messages.default" var="defaultBundle" />
+<f:loadBundle basename="messages.viewer" var="viewerBundle" />
+
+<h:outputStylesheet name="css/viewer.css" />
+	
+<o:page>
+	<h:panelGrid columns="2">
+		<h:panelGroup id="inputPanel" styleClass="borderedPanel" layout="block">
+			<h:selectOneRadio value="#{financeViewerViewController.setting.provider}">
+				<f:selectItems value="#{financeViewerViewController.providerList}" />
+			</h:selectOneRadio>
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="3">
+
+					<h:outputText value="#{viewerBundle.buyOrderRatio}" />
+					<p:inputText id="buyOrderRatio" value="#{financeViewerViewController.setting.buyOrderRatio}" required="true" />
+					<h:message for="buyOrderRatio" />
+
+					<h:outputText value="#{viewerBundle.sellNegativeOrderRatio}" />
+					<p:inputText id="sellNegativeOrderRatio" value="#{financeViewerViewController.setting.sellNegativeOrderRatio}" required="true" />
+					<h:message for="sellNegativeOrderRatio" />
+
+					<h:outputText value="#{viewerBundle.sellPositiveOrderRatio}" />
+					<p:inputText id="sellPositiveOrderRatio" value="#{financeViewerViewController.setting.sellPositiveOrderRatio}" required="true" />
+					<h:message for="sellPositiveOrderRatio" />
+				</h:panelGrid>
+
+				<h:panelGroup>
+					<h:selectOneRadio value="#{financeViewerViewController.setting.algorithm}" layout="pageDirection">
+						<f:selectItems value="#{financeViewerViewController.algorithmList}" />
+					</h:selectOneRadio>
+
+					<p:commandButton id="saveInput" value="#{viewerBundle.apply}" update="inputPanel outputPanel listing" process="inputPanel" action="#{financeViewerViewController.saveSetting}" />
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:panelGroup>
+
+		<h:panelGroup id="outputPanel" styleClass="outputPanel" layout="block">
+			<h:panelGroup id="newAmountPanel" layout="block" styleClass="borderedPanel" style="margin-bottom: 20px;">
+				<h:outputText value="#{viewerBundle.newAmount}" />
+				<p:inputText id="newAmount" value="#{financeViewerViewController.addedTLAmount}" required="true" />
+				<h:message for="newAmount" />
+
+				<p:commandButton id="addInvesment" value="#{viewerBundle.addInvesment}" update="newAmountPanel summaryPanel" process="newAmountPanel"
+					action="#{financeViewerViewController.addTRInvesment}" />
+			</h:panelGroup>
+
+			<h:panelGroup id="summaryPanel" layout="block">
+				<h:panelGrid columns="5" columnClasses="borderedPanel,borderedPanel,borderedPanel,borderedPanel,borderedPanel,">
+					<h:outputText value="#{viewerBundle.summaryInvestedAmount}" />
+					<h:outputText value="#{viewerBundle.summaryWaitingInvesment}" />
+					<h:outputText value="#{viewerBundle.summaryProcessedInvesment}" />
+					<h:outputText value="#{viewerBundle.summaryTotalGain}" />
+					<h:outputText value="#{viewerBundle.summaryTotalInvesment}" />
+
+					<h:outputText value="#{financeViewerViewController.summary.investedAmount}" />					
+					<h:outputText value="#{financeViewerViewController.summary.waitingInvesment}" />
+					<h:outputText value="#{financeViewerViewController.summary.processedInvesment}" />
+					<h:outputText value="#{financeViewerViewController.summary.totalIncome}" />
+					<h:outputText value="#{financeViewerViewController.summary.totalInvesment}" />
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<h:panelGroup id="statisticsPanel">
+
+		</h:panelGroup>
+	</h:panelGrid>
+
+	<h:panelGroup>
+		<h:panelGroup id="listing" layout="block">
+			<p:dataTable id="viewerDataTable" var="entity" value="#{financeViewerViewController.dataModel}" lazy="true" paginator="false" rows="100" paginatorPosition="bottom" pageLinks="5">
+
+				<ui:include src="viewer/columns.xhtml" />
+			</p:dataTable>
+		</h:panelGroup>
+
+	</h:panelGroup>
+</o:page>
+</html>

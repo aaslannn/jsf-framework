@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:cc="http://java.sun.com/jsf/composite" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<cc:interface>
+	<cc:attribute name="whichFor" 		required="true"/>
+	<cc:attribute name="widgetVar"/>
+	
+</cc:interface>
+
+<cc:implementation>
+	<h:outputScript name="js/components/overlayPanel.js" target="head"/>
+	<h:outputStylesheet name="css/components/overlayPanel.css" />
+
+	<script>
+		createOverlayPanel('#{cc.clientId}:overlayPanelGroup', '#{cc.attrs.widgetVar}','#{cc.attrs.whichFor}');
+	</script>
+
+	<h:panelGroup id="overlayPanelGroup" layout="block" styleClass="overlayPanel" style="display: none;">
+		<h:panelGroup class="closeButtonWrapper">
+			<h:commandLink styleClass="closeButton ui-icon ui-icon-closethick" onclick="hideOverlay('#{cc.clientId}:overlayPanelGroup', '#{cc.attrs.widgetVar}'); return false;" />
+		</h:panelGroup>
+		<h:panelGroup id="overlayWrapper" layout="block">
+			<cc:insertChildren/>
+		</h:panelGroup>
+	</h:panelGroup>
+</cc:implementation>
+
+</html>
